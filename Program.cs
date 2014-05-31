@@ -20,8 +20,11 @@ namespace Deployer
 				try
 				{
 					// There have to be some arguments
-					if(args == null || args.Length == 0)
-						throw new ArgumentException(GetUsage());
+					if (args == null || args.Length == 0)
+					{
+						PrintUsage();
+						return;
+					}
 
 					// Parse and gather arguments
 					arg = new Argument(new Arguments(args));
@@ -30,9 +33,6 @@ namespace Deployer
 				{
 					throw ex;
 				}
-
-				// Set project filename
-				arg.ConfigFile = arg.HomeDirectory + "\\" + arg.ConfigFile;
 
 				// Parse global settings XML file
 				Settings settings = XmlParser.ParseSettings(arg.SettingsFile, arg);
@@ -47,7 +47,7 @@ namespace Deployer
 				var msbuild_param = string.Format("{0} /p:Configuration={1} /p:Platform=AnyCPU /t:WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles={2} /p:publishUrl={3}", fullProjectPath, project.DeploymentProfile, settings.PurgeDirectory ? "True" : "False", project.DeploymentPath);
 
 				// Retrieve backup path (project/method-date)
-				settings.BackupPath = settings.BackupPath + "\\" + project.ProjectName.Substring(0, project.ProjectName.LastIndexOf('.')) + "\\" + arg.DeploymentMethod + "-" + DateTime.Now.ToString("ddMMyy");
+				settings.BackupPath = settings.BackupPath + "\\" + project.ProjectName.Substring(0, project.ProjectName.LastIndexOf('.')) + "\\" + arg.DeploymentEnvironment + "-" + DateTime.Now.ToString("ddMMyy");
 
 				// If want to manually confirm
 				if (arg.Confirmation)
@@ -103,12 +103,12 @@ namespace Deployer
 		{
 			Console.WriteLine("Deployment information:");
 			Console.WriteLine("-------------------------------------");
-			Console.WriteLine("Deploy:\t\t" + arg.DeploymentMethod);
+			Console.WriteLine("Environment:\t" + arg.DeploymentEnvironment);
 			Console.WriteLine("Project:\t" + project.ProjectPath + "\\" + project.ProjectName);
 			Console.WriteLine("Deploy profile:\t" + project.DeploymentProfile);
 			Console.WriteLine("Purge dir:\t" + (settings.PurgeDirectory ? "Yes" : "No"));
 			Console.WriteLine("Deploy path:\t" + project.DeploymentPath);
-			Console.WriteLine("Backup:\t\t" + (arg.DoBackup ? "Yes" : "No"));
+			Console.WriteLine("Backup files:\t\t" + (arg.DoBackup ? "Yes" : "No"));
 
 			if (arg.DoBackup)
 				Console.WriteLine("Backup path:\t" + settings.BackupPath);
@@ -121,13 +121,16 @@ namespace Deployer
 			Console.WriteLine(" * " + text);
 		}
 
-		public static string GetUsage()
+		public static void PrintUsage()
 		{
-			StringBuilder sb = new StringBuilder();
-			sb.AppendLine("WRONG USAGE!");
-			sb.AppendLine("Usage comes here!");
-
-			return sb.ToString();
+			Console.WriteLine("Usage: " + System.AppDomain.CurrentDomain.FriendlyName + " -e [ENVIRONMENT] -f [FILE] [OPTIONS]");
+			Console.WriteLine("OPTIONS:");
+			Console.WriteLine("  -e\tDeployment environment");
+			Console.WriteLine("  -f\tProject config file");
+			Console.WriteLine("  -s\tSettings file");
+			Console.WriteLine("  -p\tPurge directory");
+			Console.WriteLine("  -b\tBackup files before deployment");
+			Console.WriteLine("  -c\tConfirm before deployment");
 		}
 	}
 }

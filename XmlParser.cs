@@ -17,6 +17,9 @@ namespace Deployer
 			XmlDocument doc_settings = new XmlDocument();
 			doc_settings.Load(filename);
 
+			// Set home directory
+			settings.HomeDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
 			// Retrieve settings node
 			XmlNode node_settings = doc_settings.DocumentElement.SelectSingleNode("/settings");
 			if (node_settings == null)
@@ -40,7 +43,7 @@ namespace Deployer
 				bool purge = true;
 				if (arg.PurgeDirectory != null)
 				{
-					if (arg.PurgeDirectory == "0" || arg.PurgeDirectory == "false")
+					if (Settings.GetFalseValues().Contains(arg.PurgeDirectory))
 						purge = false;
 				}
 				else
@@ -56,7 +59,7 @@ namespace Deployer
 			if (node_projectsBasePath == null)
 				throw new XmlNodeException("Projects base path not available!");
 
-			settings.ProjectBase = node_projectsBasePath[arg.DeploymentMethod].InnerText;
+			settings.ProjectBase = node_projectsBasePath[arg.DeploymentEnvironment].InnerText;
 
 			// Retrieve backup path
 			XmlNode node_backup = node_settings["backup"];
@@ -96,24 +99,24 @@ namespace Deployer
 			if (!Directory.Exists(project.ProjectPath))
 				throw new FileNotFoundException("Project path doesn't exist!");
 
-			// Retrieve deployment node
-			XmlNode node_deployment = node_project["deployment"][arg.DeploymentMethod];
-			if (node_deployment == null)
-				throw new XmlNodeException("Deployment info");
+			// Retrieve deployment environment node
+			XmlNode node_environment = node_project["environment"][arg.DeploymentEnvironment];
+			if (node_environment == null)
+				throw new XmlNodeException("Deployment environment");
 
-			// Retrieve deployment path node
-			XmlNode node_deploymentPath = node_deployment["path"];
-			if (node_deploymentPath == null)
-				throw new XmlNodeException("Deployment path info");
+			// Retrieve deployment environment path node
+			XmlNode node_environmentPath = node_environment["path"];
+			if (node_environmentPath == null)
+				throw new XmlNodeException("Deployment environment path info");
 
-			project.DeploymentPath = node_deploymentPath.InnerText;
+			project.DeploymentPath = node_environmentPath.InnerText;
 
-			// Retrieve deployment profile node
-			XmlNode node_deploymentProfile = node_deployment["profile"];
-			if (node_deploymentProfile == null)
-				throw new XmlNodeException("Deployment profile info");
+			// Retrieve deployment environment profile node
+			XmlNode node_environmentProfile = node_environment["profile"];
+			if (node_environmentProfile == null)
+				throw new XmlNodeException("Deployment environment profile info");
 
-			project.DeploymentProfile = node_deploymentProfile.InnerText;
+			project.DeploymentProfile = node_environmentProfile.InnerText;
 
 			return project;
 		}

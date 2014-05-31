@@ -7,9 +7,15 @@ namespace Deployer
 {
 	public class Settings
 	{
+		public string HomeDirectory { get; set; }
 		public string MSBuildPath { get; set; }
 		public bool PurgeDirectory { get; set; }
 		public string BackupPath { get; set; }
 		public string ProjectBase { get; set; }
+
+		public static List<string> GetFalseValues()
+		{
+			return new List<string> { "0", "false" };
+		}
 	}
 }
