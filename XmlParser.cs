@@ -47,13 +47,7 @@ namespace Deployer
 			// Retrieve backup path
 			XmlNode node_backup = node_settings["backup"];
 			if (node_backup != null && arg.DoBackup)
-			{
 				settings.BackupPath = node_settings["backup"].InnerText;
-				if (File.Exists(settings.BackupPath))
-					arg.DoBackup = true;
-				else
-					arg.DoBackup = false;
-			}
 
 			return settings;
 		}

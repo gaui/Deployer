@@ -32,16 +32,19 @@ namespace Deployer
 				}
 
 				// Set project filename
-				arg.ProjectFile = arg.HomeDirectory + "\\" + arg.ProjectFile;
+				arg.ConfigFile = arg.HomeDirectory + "\\" + arg.ConfigFile;
 
 				// Parse global settings XML file
 				Settings settings = XmlParser.ParseSettings(arg.SettingsFile, arg);
 
 				// Parse project XML file
-				Project project = XmlParser.ParseProject(arg.ProjectFile, settings, arg);
+				Project project = XmlParser.ParseProject(arg.ConfigFile, settings, arg);
+
+				// Full project path
+				string fullProjectPath = project.ProjectPath + "\\" + project.ProjectName;
 
 				// Setup parameters for MSBuild
-				var msbuild_param = string.Format("{0} /p:Configuration={1} /p:Platform=AnyCPU /t:WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles={2} /p:publishUrl={3}", project.ProjectPath, project.DeploymentProfile, settings.DeleteFiles ? "True" : "False", project.DeploymentPath);
+				var msbuild_param = string.Format("{0} /p:Configuration={1} /p:Platform=AnyCPU /t:WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles={2} /p:publishUrl={3}", fullProjectPath, project.DeploymentProfile, settings.DeleteFiles ? "True" : "False", project.DeploymentPath);
 
 				// Retrieve backup path (project/method-date)
 				settings.BackupPath = settings.BackupPath + "\\" + project.ProjectName.Substring(0, project.ProjectName.LastIndexOf('.')) + "\\" + arg.DeploymentMethod + "-" + DateTime.Now.ToString("ddMMyy");
@@ -53,7 +56,7 @@ namespace Deployer
 					Console.WriteLine("Deployment information:");
 					Console.WriteLine("-------------------------------------");
 					Console.WriteLine("Deploy:\t\t" + arg.DeploymentMethod);
-					Console.WriteLine("Project:\t" + project.ProjectPath + "\\" + project.ProjectName);
+					Console.WriteLine("Project:\t" + fullProjectPath);
 					Console.WriteLine("Deploy profile:\t" + project.DeploymentProfile);
 					Console.WriteLine("Delete files:\t" + (settings.DeleteFiles ? "Yes" : "No"));
 					Console.WriteLine("Deploy path:\t" + project.DeploymentPath);

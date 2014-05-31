@@ -10,7 +10,7 @@ namespace Deployer
 	public class Argument
 	{
 		public string DeploymentMethod { get; set; }
-		public string ProjectFile { get; set; }
+		public string ConfigFile { get; set; }
 		public string SettingsFile { get; set; }
 		public bool PurgeDirectory { get; set; }
 		public bool DoBackup { get; set; }
@@ -25,11 +25,11 @@ namespace Deployer
 			else
 				this.DeploymentMethod = arg["m"];
 
-			// f - Project file
+			// f - Config file
 			if (arg["f"] == null)
 				throw new RequiredArgumentException("Project file");
 			else
-				this.ProjectFile = arg["f"];
+				this.ConfigFile = arg["f"];
 
 			// s - Settings file
 			string settingsFile = "settings.xml";
