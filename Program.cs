@@ -84,14 +84,18 @@ namespace Deployer
 					if(Directory.Exists(settings.BackupPath))
 						Directory.Delete(settings.BackupPath, true);
 
+					// Create the xcopy process
 					var b = new Process();
 					b.StartInfo = new ProcessStartInfo("xcopy.exe") { UseShellExecute = false };
+					// I = If destination does not exist and copying more than one file, assumes that destination must be a directory.
+					// E = Copies directories and subdirectories, including empty ones.
+					// Y = Suppresses prompting to confirm you want to overwrite an existing destination file.
 					b.StartInfo.Arguments = "/I /E /Y " + project.DeploymentPath + " " + settings.BackupPath;
 					b.Start();
 					b.WaitForExit();
 				}
 
-				// Create the process
+				// Create the MSBuild process
 				var p = new Process();
 				p.StartInfo = new ProcessStartInfo(settings.MSBuildPath) { UseShellExecute = false };
 				p.StartInfo.Arguments = msbuild_param;
