@@ -47,7 +47,7 @@ namespace Deployer
 				string fullProjectPath = project.ProjectPath + "\\" + project.ProjectName;
 
 				// Setup parameters for MSBuild
-				var msbuild_param = string.Format("{0} /p:Configuration={1} /p:Platform=AnyCPU /t:WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles={2} /p:publishUrl={3}", fullProjectPath, project.DeploymentProfile, settings.PurgeDirectory ? "True" : "False", project.DeploymentPath);
+				var msbuild_param = string.Format("{0} /p:Configuration={1} /p:Platform=AnyCPU /t:WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles={2} /p:publishUrl={3}", fullProjectPath, project.DeploymentProfile, arg.PurgeDirectory ? "True" : "False", project.DeploymentPath);
 
 				// Retrieve backup path (project/method-date)
 				settings.BackupPath = settings.BackupPath + "\\" + project.ProjectName.Substring(0, project.ProjectName.LastIndexOf('.')) + "\\" + arg.DeploymentEnvironment + "-" + DateTime.Now.ToString("ddMMyy");
@@ -109,7 +109,7 @@ namespace Deployer
 			Console.WriteLine("Project file:\t" + project.ProjectName);
 			Console.WriteLine("Deploy path:\t" + project.DeploymentPath);
 			Console.WriteLine("Deploy profile:\t" + project.DeploymentProfile);
-			Console.WriteLine("Purge dir:\t" + (settings.PurgeDirectory ? "Yes" : "No"));
+			Console.WriteLine("Purge dir:\t" + (arg.PurgeDirectory ? "Yes" : "No"));
 			Console.WriteLine("Backup files:\t" + (arg.DoBackup ? "Yes" : "No"));
 
 			if (arg.DoBackup)

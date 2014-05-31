@@ -15,7 +15,7 @@ namespace Deployer
 		public string DeploymentEnvironment { get; set; }
 		public string ConfigFile { get; set; }
 		public string SettingsFile { get; set; }
-		public string PurgeDirectory { get; set; }
+		public bool PurgeDirectory { get; set; }
 		public bool DoBackup { get; set; }
 		public bool Confirmation { get; set; }
 		public bool DisplayVersion { get; set; }
@@ -54,7 +54,9 @@ namespace Deployer
 
 			// p - Purge directory (default false)
 			if (arg["p"] != null && arg["p"] == "true")
-				this.PurgeDirectory = "true";
+				this.PurgeDirectory = true;
+			else
+				this.PurgeDirectory = false;
 
 			// b - Do backup (default false)
 			bool backup = false;

@@ -12,7 +12,6 @@ namespace Deployer
 	{
 		public string HomeDirectory { get; set; }
 		public string MSBuildPath { get; set; }
-		public bool PurgeDirectory { get; set; }
 		public string BackupPath { get; set; }
 		public string ProjectBase { get; set; }
 

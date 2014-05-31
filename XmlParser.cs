@@ -26,12 +26,12 @@ namespace Deployer
 			// Retrieve settings node
 			XmlNode node_settings = doc_settings.DocumentElement.SelectSingleNode("/settings");
 			if (node_settings == null)
-				throw new XmlNodeException("Settings info not available!");
+				throw new XmlNodeException("Settings info");
 
 			// Retrieve MSBuild node
 			XmlNode node_msbuild = node_settings["msbuild"];
 			if (node_msbuild == null)
-				throw new XmlNodeException("MSBuild info not available!");
+				throw new XmlNodeException("MSBuild info");
 
 			// Set MSBuild path
 			settings.MSBuildPath = node_msbuild.InnerText + "\\msbuild.exe";
@@ -39,27 +39,12 @@ namespace Deployer
 				throw new FileNotFoundException("MSBuild file not found!");
 
 			// Delete files before deployment
-			XmlNode node_purge = node_settings["purge"];
-			if (node_purge != null && (node_purge.InnerText.ToLower() == "true" || node_purge.InnerText.ToLower() == "false"))
-			{
-				// p - Purge directory (default true)
-				bool purge = false;
-				if (arg.PurgeDirectory != null)
-				{
-					purge = Convert.ToBoolean(arg.PurgeDirectory);
-				}
-				else
-				{
-					purge = Convert.ToBoolean(node_purge.InnerText.ToLower());
-				}
-
-				settings.PurgeDirectory = purge;
-			}
-
-			// Delete files before deployment
 			XmlNode node_projectsBasePath = node_settings["projects"];
 			if (node_projectsBasePath == null)
-				throw new XmlNodeException("Projects base path not available!");
+				throw new XmlNodeException("Projects base path");
+
+			if (node_projectsBasePath[arg.DeploymentEnvironment] == null)
+				throw new XmlNodeException("Projects environment path");
 
 			settings.ProjectBase = node_projectsBasePath[arg.DeploymentEnvironment].InnerText;
 
