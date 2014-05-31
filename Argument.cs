@@ -7,6 +7,9 @@ using System.Text;
 
 namespace Deployer
 {
+	/// <summary>
+	/// Handles program arguments
+	/// </summary>
 	public class Argument
 	{
 		public string DeploymentEnvironment { get; set; }
@@ -15,9 +18,17 @@ namespace Deployer
 		public string PurgeDirectory { get; set; }
 		public bool DoBackup { get; set; }
 		public bool Confirmation { get; set; }
+		public bool DisplayVersion { get; set; }
 
 		public Argument(Arguments arg)
 		{
+			// v - Display version
+			if (arg["v"] != null)
+			{
+				this.DisplayVersion = true;
+				return;
+			}
+
 			string homeDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
 			// e - Deployment environment (live, staging, test)

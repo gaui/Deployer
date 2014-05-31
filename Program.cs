@@ -9,6 +9,9 @@ using CommandLine.Utility;
 
 namespace Deployer
 {
+	/// <summary>
+	/// Main program
+	/// </summary>
 	public class Program
 	{
 		public static void Main(string[] args)
@@ -32,6 +35,13 @@ namespace Deployer
 				catch(ArgumentException ex)
 				{
 					throw ex;
+				}
+
+				// Display version info
+				if (arg.DisplayVersion)
+				{
+					PrintVersion();
+					return;
 				}
 
 				// Parse global settings XML file
@@ -104,11 +114,12 @@ namespace Deployer
 			Console.WriteLine("Deployment information:");
 			Console.WriteLine("-------------------------------------");
 			Console.WriteLine("Environment:\t" + arg.DeploymentEnvironment);
-			Console.WriteLine("Project:\t" + project.ProjectPath + "\\" + project.ProjectName);
+			Console.WriteLine("Project path:\t" + project.ProjectPath);
+			Console.WriteLine("Project file:\t" + project.ProjectName);
+			Console.WriteLine("Deploy path:\t" + project.DeploymentPath);
 			Console.WriteLine("Deploy profile:\t" + project.DeploymentProfile);
 			Console.WriteLine("Purge dir:\t" + (settings.PurgeDirectory ? "Yes" : "No"));
-			Console.WriteLine("Deploy path:\t" + project.DeploymentPath);
-			Console.WriteLine("Backup files:\t\t" + (arg.DoBackup ? "Yes" : "No"));
+			Console.WriteLine("Backup files:\t" + (arg.DoBackup ? "Yes" : "No"));
 
 			if (arg.DoBackup)
 				Console.WriteLine("Backup path:\t" + settings.BackupPath);
@@ -118,7 +129,7 @@ namespace Deployer
 
 		public static void PrintText(string text)
 		{
-			Console.WriteLine(" * " + text);
+			Console.WriteLine("* " + text);
 		}
 
 		public static void PrintUsage()
@@ -131,6 +142,15 @@ namespace Deployer
 			Console.WriteLine("  -p\tPurge directory");
 			Console.WriteLine("  -b\tBackup files before deployment");
 			Console.WriteLine("  -c\tConfirm before deployment");
+			Console.WriteLine("  -v\tVersion info");
+		}
+
+		public static void PrintVersion()
+		{
+			FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
+			string version = fvi.FileVersion;
+			Console.WriteLine("Version:\t" + version);
+			Console.WriteLine("Author:\tGudjon Jonsson");
 		}
 	}
 }

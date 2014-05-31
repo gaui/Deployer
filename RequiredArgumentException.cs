@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Deployer
 {
+	/// <summary>
+	/// Exception for required arguments
+	/// </summary>
 	public class RequiredArgumentException : Exception
 	{
 		public RequiredArgumentException(string message)

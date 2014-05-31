@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Deployer
 {
+	/// <summary>
+	/// Exception for XML nodes
+	/// </summary>
 	public class XmlNodeException : Exception
 	{
 		public XmlNodeException(string message)

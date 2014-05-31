@@ -8,6 +8,9 @@ using System.Xml;
 
 namespace Deployer
 {
+	/// <summary>
+	/// Handles parsing XML files
+	/// </summary>
 	public static class XmlParser
 	{
 		public static Settings ParseSettings(string filename, Argument arg)

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Deployer
 {
+	/// <summary>
+	/// Deployment and backup settings
+	/// </summary>
 	public class Settings
 	{
 		public string HomeDirectory { get; set; }
