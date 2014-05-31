@@ -44,36 +44,27 @@ namespace Deployer
 				string fullProjectPath = project.ProjectPath + "\\" + project.ProjectName;
 
 				// Setup parameters for MSBuild
-				var msbuild_param = string.Format("{0} /p:Configuration={1} /p:Platform=AnyCPU /t:WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles={2} /p:publishUrl={3}", fullProjectPath, project.DeploymentProfile, settings.DeleteFiles ? "True" : "False", project.DeploymentPath);
+				var msbuild_param = string.Format("{0} /p:Configuration={1} /p:Platform=AnyCPU /t:WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles={2} /p:publishUrl={3}", fullProjectPath, project.DeploymentProfile, settings.PurgeDirectory ? "True" : "False", project.DeploymentPath);
 
 				// Retrieve backup path (project/method-date)
 				settings.BackupPath = settings.BackupPath + "\\" + project.ProjectName.Substring(0, project.ProjectName.LastIndexOf('.')) + "\\" + arg.DeploymentMethod + "-" + DateTime.Now.ToString("ddMMyy");
 
-				// Ask user if he wants to continue
-				string input = "";
-				do
+				// If want to manually confirm
+				if (arg.Confirmation)
 				{
-					Console.WriteLine("Deployment information:");
-					Console.WriteLine("-------------------------------------");
-					Console.WriteLine("Deploy:\t\t" + arg.DeploymentMethod);
-					Console.WriteLine("Project:\t" + fullProjectPath);
-					Console.WriteLine("Deploy profile:\t" + project.DeploymentProfile);
-					Console.WriteLine("Delete files:\t" + (settings.DeleteFiles ? "Yes" : "No"));
-					Console.WriteLine("Deploy path:\t" + project.DeploymentPath);
-					Console.WriteLine("Backup:\t\t" + (arg.DoBackup ? "Yes" : "No"));
+					string input = "";
+					do
+					{
+						PrintInfo(arg, settings, project);
+						Console.WriteLine("Continue? (Y/N)");
+						input = Console.ReadLine();
+					}
+					while (input.ToUpper() != "Y" && input.ToUpper() != "N");
 
-					if(arg.DoBackup)
-						Console.WriteLine("Backup path:\t" + settings.BackupPath);
-
-					Console.WriteLine("-------------------------------------");
-					Console.WriteLine("Continue? (Y/N)");
-					input = Console.ReadLine();
+					// If user presses "N" (NO)
+					if (input.ToUpper() == "N")
+						throw new Exception("Deployment aborted");
 				}
-				while(input.ToUpper() != "Y" && input.ToUpper() != "N");
-
-				// If user presses "N" (NO)
-				if (input.ToUpper() == "N")
-					throw new Exception("Deployment aborted");
 
 				// Else we continue...
 
@@ -106,6 +97,23 @@ namespace Deployer
 			{
 				PrintText(ex.Message);
 			}
+		}
+
+		public static void PrintInfo(Argument arg, Settings settings, Project project)
+		{
+			Console.WriteLine("Deployment information:");
+			Console.WriteLine("-------------------------------------");
+			Console.WriteLine("Deploy:\t\t" + arg.DeploymentMethod);
+			Console.WriteLine("Project:\t" + project.ProjectPath + "\\" + project.ProjectName);
+			Console.WriteLine("Deploy profile:\t" + project.DeploymentProfile);
+			Console.WriteLine("Purge dir:\t" + (settings.PurgeDirectory ? "Yes" : "No"));
+			Console.WriteLine("Deploy path:\t" + project.DeploymentPath);
+			Console.WriteLine("Backup:\t\t" + (arg.DoBackup ? "Yes" : "No"));
+
+			if (arg.DoBackup)
+				Console.WriteLine("Backup path:\t" + settings.BackupPath);
+
+			Console.WriteLine("-------------------------------------");
 		}
 
 		public static void PrintText(string text)

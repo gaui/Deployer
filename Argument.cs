@@ -12,7 +12,7 @@ namespace Deployer
 		public string DeploymentMethod { get; set; }
 		public string ConfigFile { get; set; }
 		public string SettingsFile { get; set; }
-		public bool PurgeDirectory { get; set; }
+		public string PurgeDirectory { get; set; }
 		public bool DoBackup { get; set; }
 		public string HomeDirectory { get; set; }
 		public bool Confirmation { get; set; }
@@ -37,14 +37,9 @@ namespace Deployer
 				settingsFile = arg["s"];
 			this.SettingsFile = settingsFile;
 
-			// p - Purge directory (default true)
-			bool purge = true;
+			// p - Purge directory
 			if (arg["p"] != null)
-			{
-				if (arg["p"] == "0" || arg["p"] == "false")
-					purge = false;
-			}
-			this.PurgeDirectory = purge;
+				this.PurgeDirectory = arg["p"];
 
 			// b - Do backup (default true)
 			bool backup = true;

@@ -33,9 +33,23 @@ namespace Deployer
 				throw new FileNotFoundException("MSBuild file not found!");
 
 			// Delete files before deployment
-			XmlNode node_delete = node_settings["delete"];
-			if (node_delete != null && (node_delete.InnerText.ToLower() == "true" || node_delete.InnerText.ToLower() == "false"))
-				settings.DeleteFiles = Convert.ToBoolean(node_delete.InnerText.ToLower());
+			XmlNode node_purge = node_settings["purge"];
+			if (node_purge != null && (node_purge.InnerText.ToLower() == "true" || node_purge.InnerText.ToLower() == "false"))
+			{
+				// p - Purge directory (default true)
+				bool purge = true;
+				if (arg.PurgeDirectory != null)
+				{
+					if (arg.PurgeDirectory == "0" || arg.PurgeDirectory == "false")
+						purge = false;
+				}
+				else
+				{
+					purge = Convert.ToBoolean(node_purge.InnerText.ToLower());
+				}
+
+				settings.PurgeDirectory = purge;
+			}
 
 			// Delete files before deployment
 			XmlNode node_projectsBasePath = node_settings["projects"];

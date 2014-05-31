@@ -8,7 +8,7 @@ namespace Deployer
 	public class Settings
 	{
 		public string MSBuildPath { get; set; }
-		public bool DeleteFiles { get; set; }
+		public bool PurgeDirectory { get; set; }
 		public string BackupPath { get; set; }
 		public string ProjectBase { get; set; }
 	}
