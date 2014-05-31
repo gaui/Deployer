@@ -43,11 +43,10 @@ namespace Deployer
 			if (node_purge != null && (node_purge.InnerText.ToLower() == "true" || node_purge.InnerText.ToLower() == "false"))
 			{
 				// p - Purge directory (default true)
-				bool purge = true;
+				bool purge = false;
 				if (arg.PurgeDirectory != null)
 				{
-					if (Settings.GetFalseValues().Contains(arg.PurgeDirectory))
-						purge = false;
+					purge = Convert.ToBoolean(arg.PurgeDirectory);
 				}
 				else
 				{

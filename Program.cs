@@ -20,22 +20,15 @@ namespace Deployer
 			{
 				Argument arg = null;
 
-				try
+				// There have to be some arguments
+				if (args == null || args.Length == 0)
 				{
-					// There have to be some arguments
-					if (args == null || args.Length == 0)
-					{
-						PrintUsage();
-						return;
-					}
+					PrintUsage();
+					return;
+				}
 
-					// Parse and gather arguments
-					arg = new Argument(new Arguments(args));
-				}
-				catch(ArgumentException ex)
-				{
-					throw ex;
-				}
+				// Parse and gather arguments
+				arg = new Argument(new Arguments(args));
 
 				// Display version info
 				if (arg.DisplayVersion)
@@ -59,7 +52,7 @@ namespace Deployer
 				// Retrieve backup path (project/method-date)
 				settings.BackupPath = settings.BackupPath + "\\" + project.ProjectName.Substring(0, project.ProjectName.LastIndexOf('.')) + "\\" + arg.DeploymentEnvironment + "-" + DateTime.Now.ToString("ddMMyy");
 
-				// If want to manually confirm
+				// Check for confirmation
 				if (arg.Confirmation)
 				{
 					string input = "";
@@ -75,8 +68,6 @@ namespace Deployer
 					if (input.ToUpper() == "N")
 						throw new Exception("Deployment aborted");
 				}
-
-				// Else we continue...
 
 				// Do backup
 				if (arg.DoBackup)
@@ -149,8 +140,9 @@ namespace Deployer
 		{
 			FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
 			string version = fvi.FileVersion;
-			Console.WriteLine("Version:\t" + version);
-			Console.WriteLine("Author:\tGudjon Jonsson");
+			Console.WriteLine("Deployer for .NET");
+			Console.WriteLine("Version: " + version);
+			Console.WriteLine("Author: Gudjon Jonsson");
 		}
 	}
 }
