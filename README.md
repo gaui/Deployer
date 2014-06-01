@@ -5,7 +5,7 @@ A .NET deployer CLI that uses MSBuild to build and deploy .NET projects.
 
 Supports
 --
-* Easy XML configuration
+* Simple XML configuration
 * Multiple deployment environments per project
 * Web.config transformations
 * Backing up files before deployment (using xcopy)
