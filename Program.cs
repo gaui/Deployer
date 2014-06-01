@@ -93,6 +93,8 @@ namespace Deployer
 						// Backup failed, output and continue
 						if (b.ExitCode > 0)
 							Console.WriteLine("Backup failed with exit code " + b.ExitCode + ", continuing...");
+						else
+							Console.WriteLine("Backup successful!");
 					}
 
 					// Create the MSBuild process
@@ -107,6 +109,12 @@ namespace Deployer
 					{
 						Console.WriteLine("MSBuild failed with exit code " + p.ExitCode + ", quitting...");
 						Environment.Exit(p.ExitCode);
+					}
+					// No error, display deployment information
+					else
+					{
+						Console.WriteLine("Build & Deployment successful!");
+						PrintInfo(arg, env, settings, project);
 					}
 				}
 			}
