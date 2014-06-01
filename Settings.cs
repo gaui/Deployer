@@ -13,7 +13,12 @@ namespace Deployer
 		public string HomeDirectory { get; set; }
 		public string MSBuildPath { get; set; }
 		public string BackupPath { get; set; }
-		public string ProjectBase { get; set; }
+		public Dictionary<string, string> ProjectBase { get; set; }
+
+		public Settings()
+		{
+			this.ProjectBase = new Dictionary<string, string>();
+		}
 
 		public static List<string> GetFalseValues()
 		{

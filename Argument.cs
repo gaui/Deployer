@@ -12,11 +12,11 @@ namespace Deployer
 	/// </summary>
 	public class Argument
 	{
-		public string DeploymentEnvironment { get; set; }
+		public List<string> DeploymentEnvironment { get; set; }
 		public string ConfigFile { get; set; }
 		public string SettingsFile { get; set; }
 		public bool PurgeDirectory { get; set; }
-		public bool DoBackup { get; set; }
+		public bool Backup { get; set; }
 		public bool Confirmation { get; set; }
 		public bool DisplayVersion { get; set; }
 
@@ -35,7 +35,7 @@ namespace Deployer
 			if (arg["e"] == null || arg["e"] == "true")
 				throw new RequiredArgumentException("Deployment environment");
 			else
-				this.DeploymentEnvironment = arg["e"];
+				this.DeploymentEnvironment = arg["e"].Split(',').ToList();
 
 			// f - Config file
 			if (arg["f"] == null || arg["f"] == "true")
@@ -63,7 +63,7 @@ namespace Deployer
 			if (arg["b"] != null && arg["b"] == "true")
 					backup = true;
 
-			this.DoBackup = backup;
+			this.Backup = backup;
 
 			// c - Manual confirmation (default false)
 			bool confirm = false;

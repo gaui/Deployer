@@ -43,14 +43,17 @@ namespace Deployer
 			if (node_projectsBasePath == null)
 				throw new XmlNodeException("Projects base path");
 
-			if (node_projectsBasePath[arg.DeploymentEnvironment] == null)
-				throw new XmlNodeException("Projects environment path");
+			foreach (var env in arg.DeploymentEnvironment)
+			{
+				if (node_projectsBasePath[env] == null)
+					throw new XmlNodeException("Projects environment path");
 
-			settings.ProjectBase = node_projectsBasePath[arg.DeploymentEnvironment].InnerText;
+				settings.ProjectBase.Add(env, node_projectsBasePath[env].InnerText);
+			}
 
 			// Retrieve backup path
 			XmlNode node_backup = node_settings["backup"];
-			if (node_backup != null && arg.DoBackup)
+			if (node_backup != null && arg.Backup)
 				settings.BackupPath = node_settings["backup"].InnerText;
 
 			return settings;
@@ -81,29 +84,36 @@ namespace Deployer
 			if (node_projectPath == null)
 				throw new XmlNodeException("Project path info");
 
-			project.ProjectPath = settings.ProjectBase + "\\" + node_projectPath.InnerText;
+			foreach (var env in arg.DeploymentEnvironment)
+			{
+				ProjectEnvironment pEnv = new ProjectEnvironment();
 
-			if (!Directory.Exists(project.ProjectPath))
-				throw new FileNotFoundException("Project path doesn't exist!");
+				pEnv.ProjectPath = settings.ProjectBase[env] + "\\" + node_projectPath.InnerText;
 
-			// Retrieve deployment environment node
-			XmlNode node_environment = node_project["environment"][arg.DeploymentEnvironment];
-			if (node_environment == null)
-				throw new XmlNodeException("Deployment environment");
+				if (!Directory.Exists(pEnv.ProjectPath))
+					throw new FileNotFoundException("Project path doesn't exist!");
 
-			// Retrieve deployment environment path node
-			XmlNode node_environmentPath = node_environment["path"];
-			if (node_environmentPath == null)
-				throw new XmlNodeException("Deployment environment path info");
+				// Retrieve deployment environment node
+				XmlNode node_environment = node_project["environment"][env];
+				if (node_environment == null)
+					throw new XmlNodeException("Deployment environment");
 
-			project.DeploymentPath = node_environmentPath.InnerText;
+				// Retrieve deployment environment path node
+				XmlNode node_environmentPath = node_environment["path"];
+				if (node_environmentPath == null)
+					throw new XmlNodeException("Deployment environment path info");
 
-			// Retrieve deployment environment profile node
-			XmlNode node_environmentProfile = node_environment["profile"];
-			if (node_environmentProfile == null)
-				throw new XmlNodeException("Deployment environment profile info");
+				pEnv.DeploymentPath = node_environmentPath.InnerText;
 
-			project.DeploymentProfile = node_environmentProfile.InnerText;
+				// Retrieve deployment environment profile node
+				XmlNode node_environmentProfile = node_environment["profile"];
+				if (node_environmentProfile == null)
+					throw new XmlNodeException("Deployment environment profile info");
+
+				pEnv.DeploymentProfile = node_environmentProfile.InnerText;
+
+				project.Environment.Add(env, pEnv);
+			}
 
 			return project;
 		}
