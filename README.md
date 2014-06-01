@@ -14,7 +14,7 @@ Supports
 
 Syntax
 --
-**Usage:** Deployer.exe -e [ENVIRONMENT] -f [FILE] [OPTIONS]
+**Usage:** `Deployer.exe -e [ENVIRONMENT] -f [FILE] [OPTIONS]`
 OPTIONS:
 
 	-e     Deployment environment
