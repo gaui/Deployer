@@ -97,3 +97,8 @@ It's also possible to deploy to multiple environments in one go. You simply spec
 **Example:**
 
     Deployer.exe -e live,staging -f Project.xml -p -b -c
+
+### Integration with CI like TeamCity
+It's also possible to integrate this with TeamCity. Just create a simple *Command Line* build configuration. You will need to keep the executable and configuration files on the build server. Deployer will automatically return the same status code MSBuild returns, so if the build and deployment fails, the process will be marked as **failed**.
+
+![TeamCity](http://i.imgur.com/Lu6OTvH.png "TeamCity Command Line build configuration")
