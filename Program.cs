@@ -89,6 +89,10 @@ namespace Deployer
 						b.StartInfo.Arguments = "/I /E /Y " + project.Environment[env].DeploymentPath + " " + settings.BackupPath;
 						b.Start();
 						b.WaitForExit();
+
+						// Backup failed, output and continue
+						if (b.ExitCode > 0)
+							Console.WriteLine("Backup failed with exit code " + b.ExitCode + ", continuing...");
 					}
 
 					// Create the MSBuild process
@@ -97,6 +101,13 @@ namespace Deployer
 					p.StartInfo.Arguments = msbuild_param;
 					p.Start();
 					p.WaitForExit();
+
+					// Check if there was an error
+					if (p.ExitCode > 0)
+					{
+						Console.WriteLine("MSBuild failed with exit code " + p.ExitCode + ", quitting...");
+						Environment.Exit(p.ExitCode);
+					}
 				}
 			}
 			catch (Exception ex)
