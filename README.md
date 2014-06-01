@@ -68,10 +68,10 @@ Usage
 --
     Deployer.exe -e live -f Project.xml -p -b -c
 **Would:**
-1. Display confirmation with information
-2. Backup `\\server\C$\inetpub\wwwroot\LIVE` to `C:\Backup\Project\live-010614`
-3. Build Project.csproj
-4. Deploy to `\\server\C$\inetpub\wwwroot\LIVE` along with:
+* Display confirmation with information
+* Backup `\\server\C$\inetpub\wwwroot\LIVE` to `C:\Backup\Project\live-010614`
+* Build Project.csproj
+* Deploy to `\\server\C$\inetpub\wwwroot\LIVE` along with:
  * Purging directory
  * Transforming Web.config using `Live` profile
 
