@@ -68,10 +68,10 @@ Usage
 --
     Deployer.exe -e live -f Project.xml -p -b -c
 **Would:**
-* Display confirmation with information
-* Backup `\\server\C$\inetpub\wwwroot\LIVE` to `C:\Backup\Project\live-010614`
-* Build Project.csproj
-* Deploy to `\\server\C$\inetpub\wwwroot\LIVE` along with:
+1. Display confirmation with information
+2. Backup `\\server\C$\inetpub\wwwroot\LIVE` to `C:\Backup\Project\live-010614`
+3. Build Project.csproj
+4. Deploy to `\\server\C$\inetpub\wwwroot\LIVE` along with:
  * Purging directory
  * Transforming Web.config using `Live` profile
 
@@ -91,7 +91,7 @@ Usage
 	Continue? (Y/N)
 	
 ### Multiple deployment environments
-It's possible to deploy to multiple environments in one go. You simply specify environments seperated by a comma `,`
+It's also possible to deploy to multiple environments in one go. You simply specify environments seperated by a comma `,`
 
 **Example:**
 
