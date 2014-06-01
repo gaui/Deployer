@@ -16,13 +16,14 @@ Syntax
 --
 **Usage:** Deployer.exe -e [ENVIRONMENT] -f [FILE] [OPTIONS]
 OPTIONS:
--  -e&nbsp;&nbsp;&nbsp;&nbsp;Deployment environment
--  -f&nbsp;&nbsp;&nbsp;&nbsp;Project config file
--  -s&nbsp;&nbsp;&nbsp;&nbsp;Settings file
--  -p&nbsp;&nbsp;&nbsp;&nbsp;Purge directory
--  -b&nbsp;&nbsp;&nbsp;&nbsp;Backup files before deployment
--  -c&nbsp;&nbsp;&nbsp;&nbsp;Confirm before deployment
--  -v&nbsp;&nbsp;&nbsp;&nbsp;Version info
+
+	-e     Deployment environment
+	-f     Project config file
+	-s     Settings file
+	-p     Purge directory
+	-b     Backup files before deployment
+	-c     Confirm before deployment
+	-v     Version info
 
 Sample
 --
