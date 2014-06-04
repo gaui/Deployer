@@ -60,7 +60,7 @@ namespace Deployer
 
 			this.Backup = backup;
 
-			// c - Manual confirmation (default true)
+			// force - Manual confirmation (default true)
 			bool confirm = true;
 			if (arg["force"] != null && arg["force"] == "true")
 				confirm = false;
