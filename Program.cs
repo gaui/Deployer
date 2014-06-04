@@ -156,7 +156,7 @@ namespace Deployer
 			Console.WriteLine("  -s\tSettings file");
 			Console.WriteLine("  -p\tPurge directory");
 			Console.WriteLine("  -b\tBackup files before deployment");
-			Console.WriteLine("  -c\tConfirm before deployment");
+			Console.WriteLine("  -force\tForce without confirmation");
 			Console.WriteLine("  -v\tVersion info");
 		}
 
