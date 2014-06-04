@@ -38,7 +38,7 @@ namespace Deployer
 				}
 
 				// Parse global settings XML file
-				Settings settings = XmlParser.ParseSettings(arg.SettingsFile, arg);
+				Settings settings = XmlParser.ParseSettings("settings.xml", arg);
 
 				// Parse project XML file
 				Project project = XmlParser.ParseProject(arg.ConfigFile, settings, arg);

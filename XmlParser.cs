@@ -17,11 +17,12 @@ namespace Deployer
 		{
 			Settings settings = new Settings();
 
-			XmlDocument doc_settings = new XmlDocument();
-			doc_settings.Load(filename);
-
 			// Set home directory
 			settings.HomeDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+			// Load settings file
+			XmlDocument doc_settings = new XmlDocument();
+			doc_settings.Load(settings.HomeDirectory + "\\" + filename);
 
 			// Retrieve settings node
 			XmlNode node_settings = doc_settings.DocumentElement.SelectSingleNode("/settings");

@@ -14,7 +14,6 @@ namespace Deployer
 	{
 		public List<string> DeploymentEnvironment { get; set; }
 		public string ConfigFile { get; set; }
-		public string SettingsFile { get; set; }
 		public bool PurgeDirectory { get; set; }
 		public bool Backup { get; set; }
 		public bool Confirmation { get; set; }
@@ -42,15 +41,6 @@ namespace Deployer
 				throw new RequiredArgumentException("Project config file");
 			else
 				this.ConfigFile = homeDir + "\\" + arg["f"];
-
-			// s - Settings file
-			string settingsFile = "settings.xml";
-			if (arg["s"] == null || arg["s"] == "true")
-				this.SettingsFile = settingsFile;
-			else
-				this.SettingsFile = arg["s"];
-
-			this.SettingsFile = homeDir + "\\" + this.SettingsFile;
 
 			// p - Purge directory (default false)
 			if (arg["p"] != null && arg["p"] == "true")
