@@ -14,6 +14,7 @@ namespace Deployer
 	{
 		public List<string> DeploymentEnvironment { get; set; }
 		public string ConfigFile { get; set; }
+		public string ProjectBase { get; set; }
 		public bool PurgeDirectory { get; set; }
 		public bool Backup { get; set; }
 		public bool Confirmation { get; set; }
@@ -41,6 +42,10 @@ namespace Deployer
 				throw new RequiredArgumentException("Project config file");
 			else
 				this.ConfigFile = homeDir + "\\" + arg["f"];
+
+			// cd - Current directory
+			if (arg["cd"] != null && arg["cd"] == "true")
+				this.ProjectBase = ".";
 
 			// p - Purge directory (default false)
 			if (arg["p"] != null && arg["p"] == "true")

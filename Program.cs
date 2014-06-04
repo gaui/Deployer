@@ -151,13 +151,13 @@ namespace Deployer
 		{
 			Console.WriteLine("Usage: " + System.AppDomain.CurrentDomain.FriendlyName + " -e [ENVIRONMENT] -f [FILE] [OPTIONS]");
 			Console.WriteLine("OPTIONS:");
-			Console.WriteLine("  -e\tDeployment environment");
-			Console.WriteLine("  -f\tProject config file");
-			Console.WriteLine("  -s\tSettings file");
-			Console.WriteLine("  -p\tPurge directory");
-			Console.WriteLine("  -b\tBackup files before deployment");
-			Console.WriteLine("  -force\tForce without confirmation");
-			Console.WriteLine("  -v\tVersion info");
+			Console.WriteLine(" -e\tDeployment environment");
+			Console.WriteLine(" -f\tProject config file");
+			Console.WriteLine(" -p\tPurge directory");
+			Console.WriteLine(" -b\tBackup files before deployment");
+			Console.WriteLine(" -force\tForce without confirmation");
+			Console.WriteLine(" -cd\tWork with projects relative to the current directory");
+			Console.WriteLine(" -v\tVersion info");
 		}
 
 		public static void PrintVersion()

@@ -46,10 +46,17 @@ namespace Deployer
 
 			foreach (var env in arg.DeploymentEnvironment)
 			{
+				string projectBase;
+
 				if (node_projectsBasePath[env] == null)
 					throw new XmlNodeException("Projects environment path");
 
-				settings.ProjectBase.Add(env, node_projectsBasePath[env].InnerText);
+				if (!string.IsNullOrEmpty(arg.ProjectBase))
+					projectBase = arg.ProjectBase;
+				else
+					projectBase = node_projectsBasePath[env].InnerText;
+
+				settings.ProjectBase.Add(env, projectBase);
 			}
 
 			// Retrieve backup path
