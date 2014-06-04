@@ -3,8 +3,8 @@ Deployer
 
 A .NET deployer CLI that uses MSBuild to build and deploy .NET projects.
 
-Supports
---
+## Supports
+
 * Simple XML configuration
 * Multiple deployment environments per project
 * Web.config transformations
@@ -12,8 +12,8 @@ Supports
 * Purging directories before deployment
 * Confirmation (displaying info) before deployment
 
-Syntax
---
+## Syntax
+
 **Usage:** `Deployer.exe -e [ENVIRONMENT] -f [FILE] [OPTIONS]`
 
 **OPTIONS:**
@@ -26,8 +26,7 @@ Syntax
 	-c     Confirm before deployment
 	-v     Version info
 
-Configuration
---
+## Configuration
 
 **Example *settings.xml* file:**
 
@@ -64,8 +63,8 @@ Configuration
 		</environment>
 	</project>
 
-Usage
---
+## Usage
+
     Deployer.exe -e live -f Project.xml -p -b -c
 **Would:**
 * Read Project.xml configuration file
@@ -77,7 +76,7 @@ Usage
  * Transforming Web.config using `Live` profile
 
 ### Confirmation example:
---
+
 	Deployment information:
 	-------------------------------------
 	Environment:    live
@@ -102,3 +101,9 @@ It's also possible to deploy to multiple environments in one go. You simply spec
 It's also possible to integrate this with TeamCity. Just create a simple *Command Line* build configuration. You will need to keep the executable and configuration files on the build server. Deployer will automatically return the same status code MSBuild returns, so if the build and deployment fails, the process will be marked as **failed**.
 
 ![TeamCity](http://i.imgur.com/Lu6OTvH.png "TeamCity Command Line build configuration")
+
+## Changelog
+
+###v1.0.1
+
+* Confirmation is now default. Use `-force` to run without confirmation.
