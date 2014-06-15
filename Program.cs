@@ -121,6 +121,8 @@ namespace Deployer
 			catch (Exception ex)
 			{
 				PrintText(ex.Message);
+				// Exit with an error
+				Environment.Exit(1);
 			}
 		}
 
