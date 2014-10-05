@@ -109,6 +109,10 @@ It's also possible to integrate with TeamCity. Just create a simple *Command Lin
 
 ## Changelog
 
+###v1.0.2
+
+* Exits appropriately (status code 1) when there is an exception thrown (so TeamCity will fail when there is an error).
+
 ###v1.0.1
 
 * Confirmation is now default. Use `-force` to run without confirmation.
