@@ -122,12 +122,16 @@ namespace Deployer.Parsers
 
 				pEnv.DeploymentPath = node_environmentPath.InnerText;
 
-				// Retrieve deployment environment profile node
-				XmlNode node_environmentProfile = node_environment["profile"];
-				if (node_environmentProfile == null)
-					throw new XmlNodeException("Deployment environment profile info");
+				// We only need the profile info if it's a .NET project
+				if (project.ProjectType == "net")
+				{
+					// Retrieve deployment environment profile node
+					XmlNode node_environmentProfile = node_environment["profile"];
+					if (node_environmentProfile == null)
+						throw new XmlNodeException("Deployment environment profile info");
 
-				pEnv.DeploymentProfile = node_environmentProfile.InnerText;
+					pEnv.DeploymentProfile = node_environmentProfile.InnerText;
+				}
 
 				project.Environment.Add(env, pEnv);
 			}
