@@ -43,8 +43,8 @@ namespace Deployer
 				// Parse project XML file
 				Project project = XmlParser.ParseProject(arg.ConfigFile, settings, arg);
 
-				// Set the original backup path
-				var backupPath = settings.BackupPath;
+				// Get the deployment strategy based on the project type
+				IDeployStrategy strategy = DeployStrategyFactory.GetStrategyFromType(project.ProjectType);
 
 				foreach (var env in arg.DeploymentEnvironment)
 				{
@@ -57,11 +57,24 @@ namespace Deployer
 					// Do backup
 					if (arg.Backup)
 					{
-						Backup(backupPath, settings, project, env);
+						Backup(settings, project, env);
 					}
 
 					// Do the actual deployment
-					Deploy(arg, settings, project, env);
+					var exitCode = strategy.Deploy(arg, settings, project, env);
+
+					// Check if there was an error
+					if (exitCode > 0)
+					{
+						Console.WriteLine("Deployment failed with exit code " + exitCode + ", quitting...");
+						Environment.Exit(exitCode);
+					}
+					// No error, display deployment information
+					else
+					{
+						Console.WriteLine("Build & Deployment successful!");
+						PrintInfo(arg, env, settings, project);
+					}
 				}
 			}
 			catch (Exception ex)
@@ -69,35 +82,6 @@ namespace Deployer
 				PrintText(ex.Message);
 				// Exit with an error
 				Environment.Exit(1);
-			}
-		}
-
-		private static void Deploy(Argument arg, Settings settings, Project project, string env)
-		{
-			// Full project path
-			string fullProjectPath = project.Environment[env].ProjectPath + "\\" + project.ProjectName;
-
-			// Setup parameters for MSBuild
-			var msbuild_param = string.Format("{0} /p:Configuration={1} /p:Platform=AnyCPU /t:WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles={2} /p:publishUrl={3}", fullProjectPath, project.Environment[env].DeploymentProfile, arg.PurgeDirectory ? "True" : "False", project.Environment[env].DeploymentPath);
-
-			// Create the MSBuild process
-			var p = new Process();
-			p.StartInfo = new ProcessStartInfo(settings.MSBuildPath) { UseShellExecute = false };
-			p.StartInfo.Arguments = msbuild_param;
-			p.Start();
-			p.WaitForExit();
-
-			// Check if there was an error
-			if (p.ExitCode > 0)
-			{
-				Console.WriteLine("MSBuild failed with exit code " + p.ExitCode + ", quitting...");
-				Environment.Exit(p.ExitCode);
-			}
-			// No error, display deployment information
-			else
-			{
-				Console.WriteLine("Build & Deployment successful!");
-				PrintInfo(arg, env, settings, project);
 			}
 		}
 
@@ -117,29 +101,37 @@ namespace Deployer
 				throw new Exception("Deployment aborted");
 		}
 
-		private static void Backup(string backupPath, Settings settings, Project project, string env)
+		private static void Backup(Settings settings, Project project, string env)
 		{
-			// Retrieve backup path (project/method-date)
-			// Set it to the original path
-			settings.BackupPath = backupPath;
-			settings.BackupPath = settings.BackupPath + "\\" + project.ProjectName.Substring(0, project.ProjectName.LastIndexOf('.')) + "\\" + env + "-" + DateTime.Now.ToString("ddMMyy");
+			string projectName;
+
+			try
+			{
+				projectName = project.ProjectName.Substring(0, project.ProjectName.LastIndexOf('.'));
+			}
+			catch
+			{
+				projectName = project.ProjectName;
+			}
+
+			var backupPath = settings.BackupPath + "\\" + projectName  + "\\" + env + "-" + DateTime.Now.ToString("ddMMyy");
 
 			// Delete directory first
-			if (Directory.Exists(settings.BackupPath))
-				Directory.Delete(settings.BackupPath, true);
+			if (Directory.Exists(backupPath))
+				Directory.Delete(backupPath, true);
 
-			// Create the xcopy process
+			// Create the process
 			var b = new Process();
 			b.StartInfo = new ProcessStartInfo("robocopy.exe") { UseShellExecute = false };
 			// I = If destination does not exist and copying more than one file, assumes that destination must be a directory.
 			// E = Copies directories and subdirectories, including empty ones.
 			// Y = Suppresses prompting to confirm you want to overwrite an existing destination file.
-			b.StartInfo.Arguments = "/MIR " + project.Environment[env].DeploymentPath + " " + settings.BackupPath;
+			b.StartInfo.Arguments = "/MIR " + project.Environment[env].DeploymentPath + " " + backupPath;
 			b.Start();
 			b.WaitForExit();
 
 			// Backup failed, output and continue
-			if (b.ExitCode > 0)
+			if (b.ExitCode > 1)
 				Console.WriteLine("Backup failed with exit code " + b.ExitCode + ", continuing...");
 			else
 				Console.WriteLine("Backup successful!");
@@ -152,6 +144,7 @@ namespace Deployer
 			Console.WriteLine("Environment:\t" + env);
 			Console.WriteLine("Project path:\t" + project.Environment[env].ProjectPath);
 			Console.WriteLine("Project file:\t" + project.ProjectName);
+			Console.WriteLine("Project type:\t" + DeployStrategyFactory.GetStrategyName(project.ProjectType));
 			Console.WriteLine("Deploy path:\t" + project.Environment[env].DeploymentPath);
 			Console.WriteLine("Deploy profile:\t" + project.Environment[env].DeploymentProfile);
 			Console.WriteLine("Purge dir:\t" + (arg.PurgeDirectory ? "Yes" : "No"));

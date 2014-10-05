@@ -87,6 +87,13 @@ namespace Deployer
 
 			project.ProjectName = node_project["name"].InnerText;
 
+			// Retrieve project type node
+			XmlNode node_projectType = node_project["type"];
+			if (node_projectType == null)
+				throw new XmlNodeException("Project type info");
+
+			project.ProjectType = node_project["type"].InnerText;
+
 			// Retrieve project path node
 			XmlNode node_projectPath = node_project["path"];
 			if (node_projectPath == null)

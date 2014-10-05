@@ -45,6 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Argument.cs" />
+    <Compile Include="DeployStrategyFactory.cs" />
+    <Compile Include="HTMLDeployStrategy.cs" />
+    <Compile Include="IDeployStrategy.cs" />
+    <Compile Include="MSBuildDeployStrategy.cs" />
     <Compile Include="RequiredArgumentException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Project.cs" />
