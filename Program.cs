@@ -144,12 +144,12 @@ namespace Deployer
 			Console.WriteLine("-------------------------------------");
 		}
 
-		public static void PrintText(string text)
+		private static void PrintText(string text)
 		{
 			Console.WriteLine("* " + text);
 		}
 
-		public static void PrintUsage()
+		private static void PrintUsage()
 		{
 			Console.WriteLine("Usage: " + System.AppDomain.CurrentDomain.FriendlyName + " -e [ENVIRONMENT] -f [FILE] [OPTIONS]");
 			Console.WriteLine("OPTIONS:");
@@ -162,7 +162,7 @@ namespace Deployer
 			Console.WriteLine(" -v\tVersion info");
 		}
 
-		public static void PrintVersion()
+		private static void PrintVersion()
 		{
 			FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
 			string version = fvi.FileVersion;
