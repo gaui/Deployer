@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Deployer
+namespace Deployer.Models
 {
 	/// <summary>
 	/// Deployment and backup settings

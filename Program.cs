@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using CommandLine.Utility;
+using Deployer.Models;
+using Deployer.Parsers;
+using Deployer.Strategies;
 
 namespace Deployer
 {

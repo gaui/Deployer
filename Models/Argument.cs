@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Deployer.Exceptions;
 
-namespace Deployer
+namespace Deployer.Models
 {
 	/// <summary>
 	/// Handles program arguments

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Deployer
+namespace Deployer.Strategies
 {
 	public class DeployStrategyFactory
 	{

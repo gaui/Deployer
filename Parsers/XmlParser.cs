@@ -5,8 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using Deployer.Models;
+using Deployer.Exceptions;
 
-namespace Deployer
+namespace Deployer.Parsers
 {
 	/// <summary>
 	/// Handles parsing XML files

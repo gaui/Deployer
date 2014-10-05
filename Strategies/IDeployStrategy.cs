@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Deployer.Models;
 
-namespace Deployer
+namespace Deployer.Strategies
 {
 	/// <summary>
 	/// Deploy Strategy interface
