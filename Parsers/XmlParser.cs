@@ -33,13 +33,13 @@ namespace Deployer.Parsers
 
 			// Retrieve MSBuild node
 			XmlNode node_msbuild = node_settings["msbuild"];
-			if (node_msbuild == null)
-				throw new XmlNodeException("MSBuild info");
-
-			// Set MSBuild path
-			settings.MSBuildPath = node_msbuild.InnerText + "\\msbuild.exe";
-			if (!File.Exists(settings.MSBuildPath))
-				throw new FileNotFoundException("MSBuild file not found!");
+			if (node_msbuild != null)
+			{
+				// Set MSBuild path
+				settings.MSBuildPath = node_msbuild.InnerText + "\\msbuild.exe";
+				if (!File.Exists(settings.MSBuildPath))
+					throw new FileNotFoundException("MSBuild file not found!");
+			}
 
 			// Delete files before deployment
 			XmlNode node_projectsBasePath = node_settings["projects"];
