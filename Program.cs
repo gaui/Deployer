@@ -59,42 +59,13 @@ namespace Deployer
 					// Check for confirmation
 					if (arg.Confirmation)
 					{
-						string input = "";
-						do
-						{
-							PrintInfo(arg, env, settings, project);
-							Console.WriteLine("Continue? (Y/N)");
-							input = Console.ReadLine();
-						}
-						while (input.ToUpper() != "Y" && input.ToUpper() != "N");
-
-						// If user presses "N" (NO)
-						if (input.ToUpper() == "N")
-							throw new Exception("Deployment aborted");
+                        Confirm(arg, settings, project, env);
 					}
 
 					// Do backup
 					if (arg.Backup)
 					{
-						// Delete directory first
-						if (Directory.Exists(settings.BackupPath))
-							Directory.Delete(settings.BackupPath, true);
-
-						// Create the xcopy process
-						var b = new Process();
-						b.StartInfo = new ProcessStartInfo("robocopy.exe") { UseShellExecute = false };
-						// I = If destination does not exist and copying more than one file, assumes that destination must be a directory.
-						// E = Copies directories and subdirectories, including empty ones.
-						// Y = Suppresses prompting to confirm you want to overwrite an existing destination file.
-						b.StartInfo.Arguments = "/MIR " + project.Environment[env].DeploymentPath + " " + settings.BackupPath;
-						b.Start();
-						b.WaitForExit();
-
-						// Backup failed, output and continue
-						if (b.ExitCode > 0)
-							Console.WriteLine("Backup failed with exit code " + b.ExitCode + ", continuing...");
-						else
-							Console.WriteLine("Backup successful!");
+                        Backup(settings, project, env);
 					}
 
 					// Create the MSBuild process
@@ -126,7 +97,46 @@ namespace Deployer
 			}
 		}
 
-		public static void PrintInfo(Argument arg, string env, Settings settings, Project project)
+        private static void Confirm(Argument arg, Settings settings, Project project, string env)
+        {
+            string input = "";
+            do
+            {
+                PrintInfo(arg, env, settings, project);
+                Console.WriteLine("Continue? (Y/N)");
+                input = Console.ReadLine();
+            }
+            while (input.ToUpper() != "Y" && input.ToUpper() != "N");
+
+            // If user presses "N" (NO)
+            if (input.ToUpper() == "N")
+                throw new Exception("Deployment aborted");
+        }
+
+        private static void Backup(Settings settings, Project project, string env)
+        {
+            // Delete directory first
+            if (Directory.Exists(settings.BackupPath))
+                Directory.Delete(settings.BackupPath, true);
+
+            // Create the xcopy process
+            var b = new Process();
+            b.StartInfo = new ProcessStartInfo("robocopy.exe") { UseShellExecute = false };
+            // I = If destination does not exist and copying more than one file, assumes that destination must be a directory.
+            // E = Copies directories and subdirectories, including empty ones.
+            // Y = Suppresses prompting to confirm you want to overwrite an existing destination file.
+            b.StartInfo.Arguments = "/MIR " + project.Environment[env].DeploymentPath + " " + settings.BackupPath;
+            b.Start();
+            b.WaitForExit();
+
+            // Backup failed, output and continue
+            if (b.ExitCode > 0)
+                Console.WriteLine("Backup failed with exit code " + b.ExitCode + ", continuing...");
+            else
+                Console.WriteLine("Backup successful!");
+        }
+
+		private static void PrintInfo(Argument arg, string env, Settings settings, Project project)
 		{
 			Console.WriteLine("Deployment information:");
 			Console.WriteLine("-------------------------------------");
